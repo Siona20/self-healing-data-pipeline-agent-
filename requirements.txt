@@ -1,0 +1,14 @@
+pandas
+numpy
+streamlit
+fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary
+great-expectations
+scikit-learn
+matplotlib
+plotly
+python-dotenv
+pydantic
+pytest
