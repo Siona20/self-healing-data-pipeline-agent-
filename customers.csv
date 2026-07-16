@@ -1,0 +1,101 @@
+customer_id,first_name,last_name,email,phone,city,country,signup_date
+CUST001,Mark,Harris,mark.harris76@example.com,+1-696-841-4919,Phoenix,USA,2025-08-14
+CUST002,Michael,Thompson,michael.thompson46@example.com,+1-440-478-6502,Philadelphia,USA,2025-10-04
+CUST003,Michael,Jones,michael.jones29@example.com,+1-436-592-3503,Houston,USA,2025-02-02
+CUST004,Nancy,Wilson,nancy.wilson52@example.com,+1-755-677-7812,New York,USA,2025-04-16
+CUST005,Donald,Wilson,donald.wilson59@example.com,+1-988-798-1320,San Jose,USA,2025-07-14
+CUST006,Betty,Smith,betty.smith55@example.com,+1-505-971-7389,San Antonio,USA,2025-10-03
+CUST007,Kimberly,White,kimberly.white79@example.com,+1-817-425-8999,Houston,USA,2025-05-20
+CUST008,Nancy,Thomas,nancy.thomas13@example.com,+1-598-544-7624,Chicago,USA,2025-08-28
+CUST009,Michelle,Jones,michelle.jones89@example.com,+1-746-227-7455,San Jose,USA,2025-10-16
+CUST010,Dorothy,Smith,dorothy.smith20@example.com,+1-858-638-3223,San Diego,USA,2025-04-04
+CUST011,Jane,Rodriguez,jane.rodriguez58@example.com,+1-535-416-8449,Philadelphia,USA,2025-06-22
+CUST012,Mark,Lewis,mark.lewis58@example.com,+1-484-970-7906,Phoenix,USA,2025-02-11
+CUST013,Betty,Smith,betty.smith79@example.com,+1-253-558-4673,Los Angeles,USA,2025-11-30
+CUST014,Jane,Harris,jane.harris13@example.com,+1-453-404-1333,San Jose,USA,2025-03-20
+CUST015,Jessica,Jones,jessica.jones70@example.com,+1-885-317-4571,San Diego,USA,2025-12-25
+CUST016,Robert,Harris,robert.harris57@example.com,+1-371-820-2876,Chicago,USA,2025-06-09
+CUST017,Emily,Jackson,emily.jackson13@example.com,+1-519-789-7149,San Antonio,USA,2025-04-12
+CUST018,Michael,Jackson,michael.jackson98@example.com,+1-842-448-2669,Phoenix,USA,2025-12-17
+CUST019,Ashley,Sanchez,ashley.sanchez25@example.com,+1-779-242-6688,Dallas,USA,2025-08-08
+CUST020,Dorothy,Lopez,dorothy.lopez18@example.com,+1-718-863-6590,New York,USA,2025-08-04
+CUST021,Donald,Thomas,donald.thomas23@example.com,+1-643-570-8532,Chicago,USA,2025-08-11
+CUST022,Sarah,White,sarah.white76@example.com,+1-866-476-9817,San Diego,USA,2025-08-27
+CUST023,Nancy,Clark,nancy.clark85@example.com,+1-474-530-5022,Los Angeles,USA,2025-05-23
+CUST024,Steven,Anderson,steven.anderson41@example.com,+1-968-675-7209,Philadelphia,USA,2025-01-15
+CUST025,Betty,Ramirez,betty.ramirez51@example.com,+1-386-699-4475,Philadelphia,USA,2025-05-13
+CUST026,William,Rodriguez,william.rodriguez86@example.com,+1-918-482-1166,Dallas,USA,2025-04-08
+CUST027,Michael,Davis,michael.davis62@example.com,+1-700-768-4937,San Diego,USA,2025-11-27
+CUST028,Anthony,Thomas,anthony.thomas67@example.com,+1-217-295-5820,Houston,USA,2025-07-27
+CUST029,Anthony,Davis,anthony.davis49@example.com,+1-879-795-7046,San Diego,USA,2025-10-11
+CUST030,Charles,Lopez,charles.lopez64@example.com,+1-963-763-6419,Philadelphia,USA,2025-12-26
+CUST031,Thomas,Rodriguez,thomas.rodriguez49@example.com,+1-457-436-2976,Houston,USA,2025-06-11
+CUST032,Emily,White,emily.white78@example.com,+1-980-906-4033,Houston,USA,2025-04-21
+CUST033,Kimberly,Thomas,kimberly.thomas45@example.com,+1-941-803-9595,San Jose,USA,2025-05-25
+CUST034,Emily,Clark,emily.clark34@example.com,+1-503-432-6912,Chicago,USA,2025-06-04
+CUST035,John,Thompson,john.thompson78@example.com,+1-329-480-1745,New York,USA,2025-10-11
+CUST036,Karen,Thompson,karen.thompson26@example.com,+1-853-970-9042,Los Angeles,USA,2025-01-07
+CUST037,Daniel,Martinez,daniel.martinez70@example.com,+1-690-651-6582,Chicago,USA,2025-01-27
+CUST038,Robert,Ramirez,robert.ramirez71@example.com,+1-316-266-7565,San Diego,USA,2025-02-07
+CUST039,Daniel,Lee,daniel.lee97@example.com,+1-254-355-3444,San Jose,USA,2025-06-05
+CUST040,Michael,Davis,michael.davis25@example.com,+1-771-982-7818,San Jose,USA,2025-11-02
+CUST041,Emily,Martin,emily.martin38@example.com,+1-994-735-7232,San Diego,USA,2025-08-15
+CUST042,Karen,Ramirez,karen.ramirez85@example.com,+1-639-512-1986,San Jose,USA,2025-02-20
+CUST043,Mark,Miller,mark.miller90@example.com,+1-416-470-2330,Chicago,USA,2025-05-03
+CUST044,Sarah,Moore,sarah.moore19@example.com,+1-360-202-7693,San Diego,USA,2025-12-19
+CUST045,Ashley,Thomas,ashley.thomas47@example.com,+1-233-437-5720,Phoenix,USA,2025-12-26
+CUST046,Donna,Anderson,donna.anderson19@example.com,+1-903-439-5334,San Jose,USA,2025-12-05
+CUST047,Emily,Robinson,emily.robinson35@example.com,+1-635-317-9922,Houston,USA,2025-11-28
+CUST048,David,Robinson,david.robinson44@example.com,+1-345-273-1977,Chicago,USA,2025-06-07
+CUST049,Ashley,White,ashley.white82@example.com,+1-495-649-3037,San Diego,USA,2025-12-19
+CUST050,Karen,Thompson,karen.thompson61@example.com,+1-478-712-9847,San Diego,USA,2025-08-13
+CUST051,Michael,Martin,michael.martin15@example.com,+1-642-952-6280,San Jose,USA,2025-05-09
+CUST052,John,Williams,john.williams39@example.com,+1-890-789-1339,Phoenix,USA,2025-10-23
+CUST053,Jane,Harris,jane.harris32@example.com,+1-681-731-8245,Phoenix,USA,2025-04-03
+CUST054,Daniel,Wilson,daniel.wilson91@example.com,+1-703-293-8700,Philadelphia,USA,2025-07-29
+CUST055,William,Hernandez,william.hernandez95@example.com,+1-307-364-6403,San Antonio,USA,2025-12-22
+CUST056,Betty,Martinez,betty.martinez94@example.com,+1-610-978-1601,San Diego,USA,2025-02-15
+CUST057,William,Rodriguez,william.rodriguez51@example.com,+1-318-991-7622,Dallas,USA,2025-01-01
+CUST058,Dorothy,Ramirez,dorothy.ramirez79@example.com,+1-673-623-1888,Houston,USA,2025-09-23
+CUST059,Lisa,Martin,lisa.martin73@example.com,+1-840-652-1845,Houston,USA,2025-05-17
+CUST060,Sandra,Jones,sandra.jones46@example.com,+1-648-915-8941,Los Angeles,USA,2025-01-15
+CUST061,Matthew,Martin,matthew.martin40@example.com,+1-926-362-6091,Dallas,USA,2025-01-08
+CUST062,Sandra,Wilson,sandra.wilson21@example.com,+1-430-316-8560,Los Angeles,USA,2025-11-28
+CUST063,Donald,Jones,donald.jones73@example.com,+1-933-498-9337,Phoenix,USA,2025-08-01
+CUST064,Donald,Thomas,donald.thomas70@example.com,+1-449-667-3369,San Antonio,USA,2025-04-08
+CUST065,Michelle,Martin,michelle.martin75@example.com,+1-964-339-2143,Phoenix,USA,2025-08-01
+CUST066,William,Robinson,william.robinson74@example.com,+1-473-202-5634,Phoenix,USA,2025-10-28
+CUST067,Daniel,Perez,daniel.perez72@example.com,+1-352-657-9824,San Diego,USA,2025-06-26
+CUST068,William,Moore,william.moore79@example.com,+1-586-666-6272,Houston,USA,2025-12-24
+CUST069,Jessica,Jackson,jessica.jackson59@example.com,+1-439-994-7730,New York,USA,2025-06-12
+CUST070,Kimberly,Thomas,kimberly.thomas58@example.com,+1-595-879-3492,San Diego,USA,2025-01-19
+CUST071,David,Taylor,david.taylor85@example.com,+1-539-302-8213,Los Angeles,USA,2025-09-27
+CUST072,Michelle,Anderson,michelle.anderson11@example.com,+1-939-347-7717,Chicago,USA,2025-02-08
+CUST073,Betty,Sanchez,betty.sanchez43@example.com,+1-546-838-7512,Los Angeles,USA,2025-06-18
+CUST074,Donna,Perez,donna.perez78@example.com,+1-589-524-8994,Dallas,USA,2025-01-19
+CUST075,Ashley,Williams,ashley.williams40@example.com,+1-846-900-5708,Houston,USA,2025-02-16
+CUST076,Nancy,Brown,nancy.brown91@example.com,+1-920-302-8269,Chicago,USA,2025-12-22
+CUST077,Karen,Lewis,karen.lewis13@example.com,+1-247-532-1919,Phoenix,USA,2025-07-03
+CUST078,Lisa,Wilson,lisa.wilson28@example.com,+1-450-743-7751,San Jose,USA,2025-12-16
+CUST079,Emily,Garcia,emily.garcia31@example.com,+1-379-280-7267,San Jose,USA,2025-12-16
+CUST080,Jessica,Thomas,jessica.thomas84@example.com,+1-346-437-8555,Phoenix,USA,2025-08-24
+CUST081,Robert,Perez,robert.perez11@example.com,+1-676-494-9955,Chicago,USA,2025-02-07
+CUST082,Thomas,Lopez,thomas.lopez85@example.com,+1-506-854-7951,Phoenix,USA,2025-08-22
+CUST083,Donna,Martinez,donna.martinez35@example.com,+1-593-694-2747,Houston,USA,2025-07-15
+CUST084,Daniel,Lopez,daniel.lopez83@example.com,+1-502-916-5837,New York,USA,2025-12-04
+CUST085,Joseph,Rodriguez,joseph.rodriguez11@example.com,+1-779-902-1803,San Jose,USA,2025-09-12
+CUST086,Donald,Lewis,donald.lewis46@example.com,+1-994-435-6772,Houston,USA,2025-11-22
+CUST087,James,Martin,james.martin42@example.com,+1-894-973-3240,Los Angeles,USA,2025-11-18
+CUST088,Matthew,Johnson,matthew.johnson49@example.com,+1-651-234-6977,Chicago,USA,2025-02-16
+CUST089,Michelle,Martinez,michelle.martinez51@example.com,+1-965-625-3877,Houston,USA,2025-03-09
+CUST090,Emily,Moore,emily.moore56@example.com,+1-743-713-5465,Chicago,USA,2025-05-12
+CUST091,Michelle,Clark,michelle.clark71@example.com,+1-502-964-6549,Los Angeles,USA,2025-08-28
+CUST092,Michael,Jones,michael.jones38@example.com,+1-892-941-7511,Dallas,USA,2025-07-07
+CUST093,Michael,Sanchez,michael.sanchez60@example.com,+1-214-470-9791,Los Angeles,USA,2025-08-21
+CUST094,Lisa,Perez,lisa.perez96@example.com,+1-468-798-7242,Philadelphia,USA,2025-02-25
+CUST095,Dorothy,Davis,dorothy.davis70@example.com,+1-225-834-6374,San Jose,USA,2025-04-24
+CUST096,Matthew,Williams,matthew.williams91@example.com,+1-675-917-5951,San Antonio,USA,2025-03-01
+CUST097,David,Johnson,david.johnson14@example.com,+1-511-704-2902,Los Angeles,USA,2025-05-01
+CUST098,Steven,Moore,steven.moore27@example.com,+1-597-664-7078,Dallas,USA,2025-08-03
+CUST099,Daniel,White,daniel.white29@example.com,+1-624-870-2622,San Diego,USA,2025-11-12
+CUST100,Nancy,Rodriguez,nancy.rodriguez14@example.com,+1-906-579-4559,San Diego,USA,2025-08-16

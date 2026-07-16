@@ -1,0 +1,51 @@
+customer_id,first_name,last_name,email,phone,city,country,signup_date
+CUST001,Jane,Williams,jane.williams1@example.com,+1-555-0101,New York,USA,2025-01-01
+CUST002,Jessica,Jones,jessica.jones2@example.com,+1-555-0102,Houston,USA,2025-01-02
+CUST003,Karen,Davis,karen.davis3@example.com,+1-555-0103,Chicago,USA,2025-01-03
+CUST004,Emily,Jones,emily.jones4@example.com,+1-555-0104,Phoenix,USA,2025-01-04
+CUST005,David,Jones,david.jones5@example.com,+1-555-0105,Los Angeles,USA,2025-01-05
+CUST006;Karen;Martinez;karen.martinez6@example.com;+1-555-0106;Phoenix;USA;2025-01-06
+CUST007,Jane,Brown,jane.brown7@example.com,+1-555-0107,New York,USA,2025-01-07
+CUST008,James,Martinez,james.martinez8@example.com,+1-555-0108,Los Angeles,USA,2025-01-08
+CUST009,Jane,Williams,jane.williams9@example.com,+1-555-0109,Phoenix,USA,2025-01-09
+CUST010,Jessica,Williams,jessica.williams10@example.com,+1-555-0110,Chicago,USA,2025-01-10
+CUST011,Jane,Jones,jane.jones11@example.com,+1-555-0111,Chicago,USA,2025-01-11
+CUST012,John,Williams,john.williams12@example.com,+1-555-0112,Phoenix,USA,2025-01-12
+CUST013,Robert,Johnson,robert.johnson13@example.com,+1-555-0113,Phoenix,USA,2025-01-13
+CUST014,Robert,Brown,robert.brown14@example.com,+1-555-0114,Phoenix,USA,2025-01-14
+CUST015,James,Rodriguez,james.rodriguez15@example.com,+1-555-0115,Chicago,USA,2025-01-15
+CUST016,Jane,Rodriguez,jane.rodriguez16@example.com
+CUST017,Emily,Rodriguez,emily.rodriguez17@example.com,+1-555-0117,Houston,USA,2025-01-17
+CUST018,Jessica,Rodriguez,jessica.rodriguez18@example.com,+1-555-0118,Phoenix,USA,2025-01-18
+CUST019,Jessica,Johnson,jessica.johnson19@example.com,+1-555-0119,New York,USA,2025-01-19
+CUST020,Michael,Smith,michael.smith20@example.com,+1-555-0120,Chicago,USA,2025-01-20
+CUST021,Emily,Brown,emily.brown21@example.com,+1-555-0121,New York,USA,2025-01-21
+CUST022,Sarah,Brown,sarah.brown22@example.com,+1-555-0122,Chicago,USA,2025-01-22
+CUST023,Jane,Smith,jane.smith23@example.com,+1-555-0123,Chicago,USA,2025-01-23
+CUST024,Michael,Davis,michael.davis24@example.com,+1-555-0124,Houston,USA,2025-01-24
+CUST025,Karen,Brown,karen.brown25@example.com,+1-555-0125,Chicago,USA,2025-01-25
+CUST026,Michael,Johnson,"malformed_email@example.com,+1-555-0126,Los Angeles,USA,2025-01-26
+CUST027,Jane,Brown,jane.brown27@example.com,+1-555-0127,Los Angeles,USA,2025-01-27
+CUST028,David,Williams,david.williams28@example.com,+1-555-0128,Los Angeles,USA,2025-01-28
+CUST029,Jessica,Williams,jessica.williams29@example.com,+1-555-0129,New York,USA,2025-01-29
+CUST030,Karen,Johnson,karen.johnson30@example.com,+1-555-0130,New York,USA,2025-01-30
+CUST031,Emily,Davis,emily.davis31@example.com,+1-555-0131,Houston,USA,2025-01-31
+CUST032,John,Jones,john.jones32@example.com,+1-555-0132,Phoenix,USA,2025-01-32
+CUST033,Emily,Martinez,emily.martinez33@example.com,+1-555-0133,New York,USA,2025-01-33
+CUST034,Emily,Smith,emily.smith34@example.com,+1-555-0134,Houston,USA,2025-01-34
+CUST035,John,Smith,john.smith35@example.com,+1-555-0135,Phoenix,USA,2025-01-35
+CUST036,Jessica,Davis,jessica.davis36@example.com,+1-555-0136,Phoenix,USA,2025-01-36,extra_value_1,extra_value_2
+CUST037,Emily,Davis,emily.davis37@example.com,+1-555-0137,New York,USA,2025-01-37
+CUST038,Michael,Williams,michael.williams38@example.com,+1-555-0138,Phoenix,USA,2025-01-38
+CUST039,Emily,Brown,emily.brown39@example.com,+1-555-0139,Chicago,USA,2025-01-39
+CUST040,Michael,Johnson,michael.johnson40@example.com,+1-555-0140,New York,USA,2025-01-40
+CUST041,Robert,Garcia,robert.garcia41@example.com,+1-555-0141,Houston,USA,2025-01-41
+CUST042,James,Garcia,james.garcia42@example.com,+1-555-0142,Phoenix,USA,2025-01-42
+CUST043,Emily,Rodriguez,emily.rodriguez43@example.com,+1-555-0143,Phoenix,USA,2025-01-43
+CUST044,Emily,Miller,emily.miller44@example.com,+1-555-0144,Houston,USA,2025-01-44
+CUST045,Jane,Rodriguez,jane.rodriguez45@example.com,+1-555-0145,Houston,USA,2025-01-45
+CUST046,Sarah,Brown,sarah.brown46@example.com,+1-555-0146,New York,USA,2025-01-46
+CUST047,Sarah,Rodriguez,sarah.rodriguez47@example.com,+1-555-0147,Los Angeles,USA,2025-01-47
+CUST048,Emily,Rodriguez,emily.rodriguez48@example.com,+1-555-0148,Los Angeles,USA,2025-01-48
+CUST049,John,Smith,john.smith49@example.com,+1-555-0149,New York,USA,2025-01-49
+CUST050,James,Jones,james.jones50@example.com,+1-555-0150,Los Angeles,USA,2025-01-50

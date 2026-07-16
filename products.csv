@@ -1,0 +1,101 @@
+product_id,product_name,category,stock,supplier,unit_price
+PROD001,Smartphone Model 859,Electronics,124,WearStyle,282.28
+PROD002,Bluetooth Speaker Model 189,Electronics,26,TechCorp,594.59
+PROD003,Laptop Model 338,Electronics,23,FitLife,510.3
+PROD004,Jacket Model 529,Apparel,311,HomeGoods Co.,228.24
+PROD005,Laptop Model 814,Electronics,152,WearStyle,428.39
+PROD006,Hoodie Model 204,Apparel,59,HomeGoods Co.,101.82
+PROD007,Desk Lamp Model 370,Home & Kitchen,383,GlobalPub,809.06
+PROD008,Yoga Mat Model 487,Sports,160,FitLife,88.01
+PROD009,Desk Lamp Model 296,Home & Kitchen,33,WearStyle,707.53
+PROD010,Coffee Maker Model 975,Home & Kitchen,61,GlobalPub,240.46
+PROD011,Vacuum Cleaner Model 750,Home & Kitchen,93,HomeGoods Co.,835.77
+PROD012,Blender Model 786,Home & Kitchen,489,TechCorp,274.31
+PROD013,Dumbbells Model 646,Sports,93,GlobalPub,731.84
+PROD014,Self-Help Book Model 755,Books,122,HomeGoods Co.,691.28
+PROD015,Laptop Model 941,Electronics,171,GlobalPub,41.78
+PROD016,Coffee Maker Model 316,Home & Kitchen,300,HomeGoods Co.,914.0
+PROD017,Sneakers Model 505,Apparel,339,GlobalPub,885.84
+PROD018,Hoodie Model 242,Apparel,297,FitLife,254.16
+PROD019,Desk Lamp Model 538,Home & Kitchen,214,HomeGoods Co.,898.84
+PROD020,Jeans Model 621,Apparel,396,TechCorp,498.58
+PROD021,Laptop Model 742,Electronics,358,GlobalPub,168.38
+PROD022,Yoga Mat Model 494,Sports,249,FitLife,387.8
+PROD023,Desk Lamp Model 981,Home & Kitchen,358,TechCorp,943.01
+PROD024,Water Bottle Model 887,Sports,67,HomeGoods Co.,644.55
+PROD025,Sci-Fi Trilogy Model 564,Books,379,HomeGoods Co.,13.21
+PROD026,Dumbbells Model 619,Sports,455,HomeGoods Co.,913.5
+PROD027,Backpack Model 303,Sports,400,WearStyle,161.31
+PROD028,Backpack Model 100,Sports,260,TechCorp,602.96
+PROD029,Wireless Headphones Model 999,Electronics,423,HomeGoods Co.,985.47
+PROD030,T-Shirt Model 346,Apparel,494,TechCorp,879.23
+PROD031,Smartwatch Model 935,Electronics,399,FitLife,78.52
+PROD032,Jeans Model 775,Apparel,291,WearStyle,480.53
+PROD033,Desk Lamp Model 993,Home & Kitchen,118,FitLife,610.53
+PROD034,Hoodie Model 508,Apparel,342,HomeGoods Co.,995.2
+PROD035,History Biography Model 562,Books,125,TechCorp,129.79
+PROD036,Coffee Maker Model 702,Home & Kitchen,311,WearStyle,558.38
+PROD037,Smartphone Model 824,Electronics,127,TechCorp,634.79
+PROD038,Wireless Headphones Model 172,Electronics,152,GlobalPub,519.01
+PROD039,Jacket Model 235,Apparel,461,FitLife,726.12
+PROD040,Running Shoes Model 348,Sports,423,GlobalPub,786.77
+PROD041,T-Shirt Model 199,Apparel,191,GlobalPub,662.39
+PROD042,Cookbook Model 984,Books,354,TechCorp,731.79
+PROD043,Smartwatch Model 845,Electronics,451,TechCorp,345.91
+PROD044,Jeans Model 294,Apparel,81,GlobalPub,540.92
+PROD045,Hoodie Model 573,Apparel,482,TechCorp,257.31
+PROD046,History Biography Model 200,Books,286,TechCorp,60.08
+PROD047,Laptop Model 270,Electronics,256,WearStyle,412.35
+PROD048,Fiction Novel Model 268,Books,209,HomeGoods Co.,385.18
+PROD049,Self-Help Book Model 533,Books,384,FitLife,699.63
+PROD050,Sci-Fi Trilogy Model 294,Books,39,FitLife,303.74
+PROD051,Yoga Mat Model 865,Sports,35,FitLife,320.47
+PROD052,History Biography Model 973,Books,39,FitLife,535.81
+PROD053,Laptop Model 170,Electronics,355,WearStyle,599.08
+PROD054,Fiction Novel Model 683,Books,314,TechCorp,253.75
+PROD055,Yoga Mat Model 529,Sports,299,FitLife,660.8
+PROD056,Air Fryer Model 309,Home & Kitchen,170,WearStyle,673.03
+PROD057,Vacuum Cleaner Model 234,Home & Kitchen,163,GlobalPub,674.97
+PROD058,Coffee Maker Model 109,Home & Kitchen,298,TechCorp,463.7
+PROD059,Bluetooth Speaker Model 318,Electronics,77,HomeGoods Co.,510.83
+PROD060,Laptop Model 478,Electronics,234,FitLife,292.14
+PROD061,Desk Lamp Model 926,Home & Kitchen,14,FitLife,657.44
+PROD062,Coffee Maker Model 999,Home & Kitchen,69,TechCorp,142.95
+PROD063,Dumbbells Model 378,Sports,117,HomeGoods Co.,288.94
+PROD064,Hoodie Model 617,Apparel,473,TechCorp,493.65
+PROD065,Smartwatch Model 949,Electronics,11,HomeGoods Co.,283.91
+PROD066,Hoodie Model 265,Apparel,292,GlobalPub,743.82
+PROD067,Yoga Mat Model 214,Sports,462,WearStyle,84.49
+PROD068,Yoga Mat Model 954,Sports,292,WearStyle,375.52
+PROD069,Sci-Fi Trilogy Model 142,Books,470,TechCorp,315.18
+PROD070,Blender Model 798,Home & Kitchen,62,HomeGoods Co.,257.03
+PROD071,Running Shoes Model 735,Sports,483,WearStyle,751.98
+PROD072,Jeans Model 522,Apparel,387,HomeGoods Co.,34.54
+PROD073,Sci-Fi Trilogy Model 373,Books,369,TechCorp,167.61
+PROD074,Fiction Novel Model 979,Books,112,GlobalPub,475.98
+PROD075,Air Fryer Model 940,Home & Kitchen,126,WearStyle,797.39
+PROD076,Laptop Model 508,Electronics,452,TechCorp,334.98
+PROD077,Air Fryer Model 756,Home & Kitchen,357,FitLife,514.31
+PROD078,Coffee Maker Model 218,Home & Kitchen,143,WearStyle,878.27
+PROD079,Water Bottle Model 139,Sports,232,HomeGoods Co.,117.32
+PROD080,Vacuum Cleaner Model 720,Home & Kitchen,69,GlobalPub,984.39
+PROD081,Dumbbells Model 360,Sports,233,TechCorp,53.94
+PROD082,Backpack Model 803,Sports,389,WearStyle,722.24
+PROD083,Vacuum Cleaner Model 171,Home & Kitchen,481,HomeGoods Co.,949.39
+PROD084,Water Bottle Model 779,Sports,378,HomeGoods Co.,849.54
+PROD085,Water Bottle Model 782,Sports,216,HomeGoods Co.,414.31
+PROD086,Dumbbells Model 296,Sports,491,GlobalPub,426.24
+PROD087,Jacket Model 682,Apparel,290,TechCorp,307.94
+PROD088,Air Fryer Model 315,Home & Kitchen,306,FitLife,435.59
+PROD089,Vacuum Cleaner Model 552,Home & Kitchen,119,FitLife,447.74
+PROD090,Sci-Fi Trilogy Model 774,Books,273,FitLife,93.95
+PROD091,Coffee Maker Model 938,Home & Kitchen,130,HomeGoods Co.,952.48
+PROD092,Jeans Model 250,Apparel,135,GlobalPub,34.18
+PROD093,Yoga Mat Model 566,Sports,332,FitLife,420.3
+PROD094,Sneakers Model 606,Apparel,85,TechCorp,405.66
+PROD095,Smartwatch Model 324,Electronics,500,FitLife,184.13
+PROD096,Fiction Novel Model 670,Books,444,TechCorp,256.71
+PROD097,Sci-Fi Trilogy Model 920,Books,281,FitLife,470.0
+PROD098,Water Bottle Model 873,Sports,323,FitLife,892.51
+PROD099,History Biography Model 556,Books,390,GlobalPub,898.24
+PROD100,Self-Help Book Model 869,Books,336,HomeGoods Co.,254.77

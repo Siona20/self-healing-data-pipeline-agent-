@@ -1,0 +1,51 @@
+customer_id,first_name,last_name,email,phone,city,country,signup_date
+CUST001,Michael,Davis,,,Houston,USA,2025-01-01
+CUST002,Michael,Miller,michael.miller2@example.com,,Chicago,USA,2025-01-02
+CUST003,James,Rodriguez,james.rodriguez3@example.com,,New York,USA,2025-01-03
+CUST004,Robert,Johnson,,+1-555-0104,New York,USA,2025-01-04
+CUST005,Jessica,Jones,jessica.jones5@example.com,+1-555-0105,New York,USA,2025-01-05
+CUST006,Emily,Garcia,emily.garcia6@example.com,+1-555-0106,Los Angeles,USA,2025-01-06
+CUST007,David,Brown,david.brown7@example.com,+1-555-0107,Los Angeles,USA,2025-01-07
+CUST008,Michael,Brown,michael.brown8@example.com,+1-555-0108,Chicago,USA,2025-01-08
+CUST009,Sarah,Miller,sarah.miller9@example.com,+1-555-0109,Los Angeles,USA,2025-01-09
+CUST010,James,Davis,james.davis10@example.com,+1-555-0110,Phoenix,USA,2025-01-10
+CUST011,David,Miller,david.miller11@example.com,+1-555-0111,Los Angeles,USA,2025-01-11
+CUST012,Jane,Williams,jane.williams12@example.com,+1-555-0112,New York,USA,2025-01-12
+CUST013,Karen,Miller,,+1-555-0113,Los Angeles,USA,2025-01-13
+CUST014,Karen,Williams,karen.williams14@example.com,+1-555-0114,Los Angeles,USA,2025-01-14
+CUST015,Michael,Smith,,,Los Angeles,USA,2025-01-15
+CUST016,Jessica,Miller,jessica.miller16@example.com,+1-555-0116,Los Angeles,USA,2025-01-16
+CUST017,Karen,Rodriguez,karen.rodriguez17@example.com,+1-555-0117,New York,USA,2025-01-17
+CUST018,Karen,Brown,,+1-555-0118,Phoenix,USA,2025-01-18
+CUST019,Robert,Jones,robert.jones19@example.com,,Phoenix,USA,2025-01-19
+CUST020,Sarah,Rodriguez,,+1-555-0120,Chicago,USA,2025-01-20
+CUST021,Robert,Garcia,robert.garcia21@example.com,+1-555-0121,Houston,USA,2025-01-21
+CUST022,James,Smith,james.smith22@example.com,+1-555-0122,New York,USA,2025-01-22
+CUST023,David,Miller,david.miller23@example.com,+1-555-0123,Chicago,USA,2025-01-23
+CUST024,Emily,Miller,emily.miller24@example.com,+1-555-0124,Phoenix,USA,2025-01-24
+CUST025,Jessica,Martinez,,+1-555-0125,Chicago,USA,2025-01-25
+CUST026,Michael,Smith,michael.smith26@example.com,,Phoenix,USA,2025-01-26
+CUST027,Sarah,Williams,sarah.williams27@example.com,+1-555-0127,New York,USA,2025-01-27
+CUST028,David,Johnson,david.johnson28@example.com,+1-555-0128,New York,USA,2025-01-28
+CUST029,Karen,Brown,karen.brown29@example.com,+1-555-0129,Chicago,USA,2025-01-29
+CUST030,Robert,Martinez,robert.martinez30@example.com,+1-555-0130,Los Angeles,USA,2025-01-30
+CUST031,Karen,Garcia,karen.garcia31@example.com,+1-555-0131,Chicago,USA,2025-01-31
+CUST032,Jessica,Smith,jessica.smith32@example.com,+1-555-0132,New York,USA,2025-01-32
+CUST033,Jessica,Brown,jessica.brown33@example.com,+1-555-0133,Phoenix,USA,2025-01-33
+CUST034,Jane,Martinez,jane.martinez34@example.com,+1-555-0134,Los Angeles,USA,2025-01-34
+CUST035,John,Miller,john.miller35@example.com,+1-555-0135,New York,USA,2025-01-35
+CUST036,James,Williams,james.williams36@example.com,,Phoenix,USA,2025-01-36
+CUST037,Jessica,Rodriguez,jessica.rodriguez37@example.com,+1-555-0137,New York,USA,2025-01-37
+CUST038,Jessica,Williams,jessica.williams38@example.com,+1-555-0138,New York,USA,2025-01-38
+CUST039,Jessica,Smith,jessica.smith39@example.com,+1-555-0139,Los Angeles,USA,2025-01-39
+CUST040,Emily,Williams,emily.williams40@example.com,+1-555-0140,New York,USA,2025-01-40
+CUST041,John,Williams,john.williams41@example.com,+1-555-0141,Los Angeles,USA,2025-01-41
+CUST042,Jane,Johnson,jane.johnson42@example.com,,Chicago,USA,2025-01-42
+CUST043,Jane,Miller,jane.miller43@example.com,+1-555-0143,New York,USA,2025-01-43
+CUST044,Robert,Miller,robert.miller44@example.com,+1-555-0144,Houston,USA,2025-01-44
+CUST045,Jessica,Garcia,jessica.garcia45@example.com,+1-555-0145,Houston,USA,2025-01-45
+CUST046,Robert,Brown,,+1-555-0146,Phoenix,USA,2025-01-46
+CUST047,Karen,Jones,karen.jones47@example.com,+1-555-0147,Houston,USA,2025-01-47
+CUST048,Michael,Brown,michael.brown48@example.com,+1-555-0148,Houston,USA,2025-01-48
+CUST049,Jane,Martinez,jane.martinez49@example.com,+1-555-0149,Chicago,USA,2025-01-49
+CUST050,James,Jones,james.jones50@example.com,+1-555-0150,New York,USA,2025-01-50
