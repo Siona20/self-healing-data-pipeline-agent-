@@ -1,7 +1,11 @@
 """
 Main entry point for orchestrating the Self-Healing Data Pipeline.
 
-This script integrates the ingestion, validation, and monitoring modules.
+This script integrates the ingestion, validation, monitoring, and anomaly
+detection modules.  Every pipeline run now produces a structured
+``DetectionResult`` (a list of typed ``Incident`` objects) that downstream
+agents — starting with the Diagnosis Agent — can consume directly without
+parsing raw error strings.
 """
 
 import json
@@ -18,6 +22,7 @@ import pandas as pd
 from pipeline.ingestion import load_csv
 from pipeline.validation import validate_dataset
 from pipeline.monitoring import PipelineMonitor
+from pipeline.anomaly_detector import analyse_pipeline
 
 # Configure stdout and stderr to handle UTF-8 encoding properly, especially on Windows
 if sys.platform == "win32":
@@ -244,7 +249,13 @@ def main() -> None:
     # 7. Generate pipeline metrics (pass validation report for quality score)
     metrics = monitor.generate_metrics(validation_report=validation_report)
 
-    # 8. Print Reports
+    # 8. Run anomaly detection — produces structured incidents for AI agents
+    detection_result = analyse_pipeline(
+        validation_report=validation_report,
+        pipeline_metrics=metrics,
+    )
+
+    # 9. Print Reports
     if validation_report:
         print("\nValidation Report:")
         print(json.dumps(validation_report, indent=4))
@@ -264,8 +275,42 @@ def main() -> None:
     print("\nPipeline Metrics:")
     print(json.dumps(metrics, indent=4))
 
+    # 10. Print Anomaly Detection / Incident Report
+    print("\n" + "=" * 50)
+    print("ANOMALY DETECTION REPORT")
+    print("=" * 50)
+
+    incidents = detection_result.get("incidents", [])
+    total_incidents = detection_result.get("total_incidents", 0)
+    pipeline_healthy = detection_result.get("pipeline_healthy", True)
+
+    if pipeline_healthy:
+        print("Pipeline Health: HEALTHY")
+        print("No incidents detected.")
+    else:
+        print(f"Pipeline Health: UNHEALTHY")
+        print(f"Total Incidents: {total_incidents}")
+        print()
+        for idx, inc in enumerate(incidents, start=1):
+            print(f"  Incident #{idx}")
+            print(f"    ID          : {inc['incident_id']}")
+            print(f"    Type        : {inc['incident_type']}")
+            print(f"    Severity    : {inc['severity']}")
+            print(f"    Confidence  : {inc['confidence']:.0%}")
+            print(f"    Status      : {inc['status']}")
+            print(f"    Source      : {inc['source_module']}")
+            print(f"    Description : {inc['description']}")
+            print(f"    Action      : {inc['recommended_action']}")
+            print()
+
+    # Full machine-readable incident payload (consumed by Diagnosis Agent)
+    print("Full Incident Payload (JSON):")
+    print(json.dumps(detection_result, indent=4))
+
     print("\nPipeline Finished.")
     print("=" * 50)
+
+    return detection_result
 
 
 if __name__ == "__main__":
