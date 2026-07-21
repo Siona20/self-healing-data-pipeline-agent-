@@ -8,14 +8,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - Upcoming
 
 ### Planned Features
-- Remediation Engine (`remediation/`)
-- Verification Module
 - Incident Logging & Persistence
 - Streamlit Dashboard (`dashboard/`)
 - FastAPI REST layer
 - Docker containerisation
 - Apache Airflow orchestration
 - AWS Deployment
+
+---
+
+## [0.7.0] - 2026-07-18
+
+### Added
+
+#### Verification Agent (`agents/verification_agent.py`)
+- Full **Verification Agent** implementation — the validation layer that closes the self-healing loop by checking execution outcomes against success criteria.
+- Decoupled `BaseVerificationAgent` abstract class and deterministic `RuleBasedVerificationAgent` production default.
+- Tunable `VerificationConfig` controlling check thresholds, retry penalties, and rollback penalties.
+- `VerificationResult` and `VerificationSummary` data containers capturing checks, pass rates, and actionable recommendations (e.g. re-diagnose, escalate).
+- Dynamic recommendation engine and post-verification pipeline health assessments.
+- Dry-run verification mode and complete run history tracking.
+- Exported all public symbols from the `agents` package.
+
+#### Main Orchestrator (`main.py`)
+- Programmatically integrated the entire self-healing pipeline (Ingestion → Validation → Monitoring → Anomaly Detection → Diagnosis → Planning → Execution → Verification).
+- Formatted command-line execution supporting custom datasets: `python main.py [dataset.csv]`.
+- Premium-grade formatted reports printed for each stage of the loop showing diagnoses, remediation blueprints, execution attempt steps, and verification audits.
+
+---
+
+## [0.6.0] - 2026-07-18
+
+### Added
+
+#### Executor Agent (`agents/executor_agent.py`)
+- Production-grade **Executor Agent** module simulating or executing remediation plans sequentially by priority.
+- Swappable interface pattern with `BaseExecutor` and deterministic fallback `RuleBasedExecutor`.
+- **Configurable Retry Policy**: immediate, linear, and exponential backoff strategies with customizable delays.
+- **Idempotency Guard**: tracks executed plan IDs to prevent duplicate execution.
+- **Chronological Timeline**: event-based audit logging capturing all execution phases.
+- **Circuit Breaker**: opens and skips subsequent plans after N consecutive consecutive failures.
+- **Dry-run mode**: simulates execution while marking all action steps as `DRY_RUN`.
+- Formatted metrics capturing success, failure, rollback, and retry rates.
+- Public exports in `agents` package.
+
+---
+
+## [0.5.0] - 2026-07-18
+
+### Added
+
+#### Remediation Planner (`remediation/remediation_planner.py`)
+- Deterministic **Remediation Planner** mapping diagnoses to actionable plans.
+- Decoupled planning architecture via `BaseRemediationPlanner` and default `RuleBasedRemediationPlanner`.
+- Centralised `_PLAN_CONFIG` knowledge base detailing strategy preconditions, rollback capabilities, and success criteria.
+- **Confidence gating**: auto-upgrades AUTOMATIC mode to SEMI-AUTOMATIC or MANUAL under uncertainty.
+- Urgency-based execution priority (P1–P5) and sequence sorting.
+- Public exports in the `remediation` package.
 
 ---
 

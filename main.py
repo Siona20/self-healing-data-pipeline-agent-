@@ -23,6 +23,8 @@ from pipeline.ingestion import load_csv
 from pipeline.validation import validate_dataset
 from pipeline.monitoring import PipelineMonitor
 from pipeline.anomaly_detector import analyse_pipeline
+from agents import diagnose_pipeline, execute_remediation, verify_remediation
+from remediation import plan_remediation
 
 # Configure stdout and stderr to handle UTF-8 encoding properly, especially on Windows
 if sys.platform == "win32":
@@ -32,11 +34,14 @@ if sys.platform == "win32":
 # ==============================================================================
 # CONFIGURATION
 # ==============================================================================
-# Change this path to test different datasets:
+# Default path. Can be overridden via command line argument, e.g.: python main.py outliers.csv
 # - Clean: "customers.csv", "orders.csv", "products.csv"
 # - Faulty: "missing_values.csv", "duplicates.csv", "schema_drift.csv",
 #           "wrong_datatype.csv", "outliers.csv", "corrupted_records.csv"
 FILE_PATH = "customers.csv"
+if len(sys.argv) > 1:
+    FILE_PATH = sys.argv[1]
+
 
 # Configure logging
 logging.basicConfig(
@@ -176,14 +181,90 @@ def print_check_status(validation_result: Dict[str, Any], expected_schema: Dict[
             print("✔ All values within expected ranges")
 
 
+def print_persisted_run(run_summary: Dict[str, Any]) -> None:
+    """
+    Print the persisted pipeline run records in a readable format.
+
+    Args:
+        run_summary: The dict returned by
+            ``PersistenceOrchestrator.format_run_summary()``.
+    """
+    print("\n" + "=" * 60)
+    print("DATABASE PERSISTENCE REPORT")
+    print("=" * 60)
+    print(f"  Run ID          : {run_summary['run_id']}")
+    print(f"  Pipeline Name   : {run_summary['pipeline_name']}")
+    print(f"  File Path       : {run_summary['file_path']}")
+    print(f"  Status          : {run_summary['status']}")
+    print(f"  Pipeline Healthy: {run_summary['pipeline_healthy']}")
+    print(f"  Total Incidents : {run_summary['total_incidents']}")
+    print(f"  Quality Score   : {run_summary['quality_score']}%")
+    print(f"  Exec Time       : {run_summary['execution_time_seconds']}s")
+    print(f"  Rows Processed  : {run_summary['rows_processed']}")
+    print(f"  Rows Failed     : {run_summary['rows_failed']}")
+    print(f"  Total Rows      : {run_summary['total_rows']}")
+    print(f"  Started At      : {run_summary['started_at']}")
+    print(f"  Ended At        : {run_summary['ended_at']}")
+
+    vr = run_summary.get("validation_report")
+    if vr:
+        print(f"\n  Validation Report:")
+        print(f"    Status        : {vr['status']}")
+        print(f"    Checks        : {vr['passed_checks']}/{vr['total_checks']} passed")
+        print(f"    Issue Types   : {vr['issue_types'] or 'None'}")
+
+    incidents = run_summary.get("incidents", [])
+    if incidents:
+        print(f"\n  Persisted Incidents ({len(incidents)}):")
+        for idx, inc in enumerate(incidents, start=1):
+            print(f"\n    [{idx}] {inc['incident_id']} — {inc['incident_type']} ({inc['severity']})")
+            dgn = inc.get("diagnosis")
+            if dgn:
+                print(f"         Diagnosis   : {dgn['diagnosis_id']} | P{dgn['priority']} | conf={dgn['confidence_score']:.0%}")
+                print(f"         Root Cause  : {dgn['probable_root_cause'][:80]}...")
+                print(f"         Strategy    : {dgn['suggested_remediation_strategy']}")
+            plan = inc.get("remediation_plan")
+            if plan:
+                print(f"         Plan        : {plan['plan_id']} | {plan['mode']} | status={plan['status']}")
+            exe = inc.get("execution_result")
+            if exe:
+                print(f"         Execution   : {exe['execution_id']} | {exe['execution_status']} | {exe['execution_time_seconds']:.4f}s")
+            vrf = inc.get("verification_result")
+            if vrf:
+                print(f"         Verification: {vrf['verification_id']} | {vrf['verification_status']} | health={vrf['pipeline_health_after_verification']}")
+    else:
+        print("\n  No incidents persisted (pipeline healthy).")
+
+    print("\n" + "=" * 60)
+    print("DATABASE PERSISTENCE COMPLETE")
+    print("=" * 60)
+
+
 def main() -> None:
     """
-    Orchestrates the ingestion, validation, and monitoring pipeline.
+    Orchestrates the ingestion, validation, monitoring, and self-healing pipeline.
+    Persists every stage to the database after completion.
     """
     print("=" * 50)
     print("SELF-HEALING DATA PIPELINE")
     print("=" * 50)
-    
+
+    # ------------------------------------------------------------------
+    # DATABASE INITIALISATION
+    # ------------------------------------------------------------------
+    print("\nInitialising database...")
+    try:
+        from database import DatabaseManager, PersistenceOrchestrator
+        db_manager = DatabaseManager()
+        db_manager.init_db()
+        print("✔ Database initialised successfully.")
+        db_available = True
+    except Exception as db_init_err:
+        logger.error(f"Database initialisation failed: {db_init_err}")
+        print(f"✖ Database unavailable: {db_init_err}")
+        print("  Pipeline will run without persistence.")
+        db_available = False
+
     # 1. Initialize the PipelineMonitor
     pipeline_name = Path(FILE_PATH).stem
     monitor = PipelineMonitor(pipeline_name=pipeline_name)
@@ -306,6 +387,191 @@ def main() -> None:
     # Full machine-readable incident payload (consumed by Diagnosis Agent)
     print("Full Incident Payload (JSON):")
     print(json.dumps(detection_result, indent=4))
+
+    # ==========================================================================
+    # AUTONOMOUS SELF-HEALING ENGINE EXECUTION
+    # ==========================================================================
+    diagnosis_result = None
+    planning_result = None
+    execution_summary = None
+    verification_summary = None
+
+    if not pipeline_healthy:
+        print("\n" + "=" * 50)
+        print("DIAGNOSIS AGENT EXECUTION")
+        print("=" * 50)
+        
+        # 11. Run root cause diagnosis
+        diagnosis_result = diagnose_pipeline(detection_result)
+        print(f"Total Diagnoses: {diagnosis_result['total_diagnoses']}")
+        print(f"Critical Diagnoses: {diagnosis_result['critical_count']}")
+        print(f"Human Intervention Needed: {diagnosis_result['human_intervention_required']}")
+        print(f"Auto-Remediable Diagnoses: {diagnosis_result['auto_remediable_count']}")
+        print("\nDiagnoses Detail:")
+        for idx, dgn in enumerate(diagnosis_result.get("diagnoses", []), start=1):
+            print(f"  Diagnosis #{idx}")
+            print(f"    ID                : {dgn['diagnosis_id']}")
+            print(f"    Incident ID       : {dgn['incident_id']}")
+            print(f"    Stage Affected    : {dgn['impacted_pipeline_stage']}")
+            print(f"    Root Cause        : {dgn['probable_root_cause']}")
+            print(f"    Confidence        : {dgn['confidence_score']:.0%}")
+            print(f"    Priority          : P{dgn['priority']}")
+            print(f"    Strategy Suggested: {dgn['suggested_remediation_strategy']}")
+            print(f"    Reasoning         : {dgn['reasoning_summary']}")
+            print()
+
+        print("\n" + "=" * 50)
+        print("REMEDIATION PLANNER EXECUTION")
+        print("=" * 50)
+        
+        # 12. Run remediation planner
+        planning_result = plan_remediation(diagnosis_result)
+        print(f"Total Plans Generated: {planning_result['total_plans_generated']}")
+        print(f"Automatic Mode Plans : {planning_result['automatic_count']}")
+        print(f"Semi-Automatic Plans : {planning_result['semi_automatic_count']}")
+        print(f"Manual Mode Plans    : {planning_result['manual_count']}")
+        print(f"Human Approval Req.  : {planning_result['human_approval_required']}")
+        print("\nRemediation Plans Detail:")
+        for idx, plan in enumerate(planning_result.get("plans", []), start=1):
+            print(f"  Plan #{idx}")
+            print(f"    ID          : {plan['plan_id']}")
+            print(f"    Strategy    : {plan['strategy']}")
+            print(f"    Mode        : {plan['mode']}")
+            print(f"    Priority    : P{plan['execution_priority']}")
+            print(f"    Approval    : {'Required' if plan['requires_human_approval'] else 'Not required'}")
+            print(f"    Rollback    : {plan['rollback_capability']} ({'Possible' if plan['rollback_possible'] else 'Impossible'})")
+            print(f"    Preconds    :")
+            for prec in plan.get("preconditions", []):
+                print(f"      - {prec}")
+            print(f"    Success Crit:")
+            for crit in plan.get("success_criteria", []):
+                print(f"      - {crit}")
+            print(f"    Expected Out: {plan['expected_outcome']}")
+            print()
+
+        print("\n" + "=" * 50)
+        print("EXECUTOR AGENT EXECUTION")
+        print("=" * 50)
+        
+        # 13. Run executor agent
+        execution_summary = execute_remediation(planning_result)
+        print(f"Plans Processed    : {execution_summary['total_plans_received']}")
+        print(f"Executed Attempts  : {execution_summary['total_executed']}")
+        print(f"Succeeded          : {execution_summary['total_succeeded']}")
+        print(f"Failed             : {execution_summary['total_failed']}")
+        print(f"Skipped (Precond)  : {execution_summary['total_skipped']}")
+        print(f"Rolled Back        : {execution_summary['total_rolled_back']}")
+        print(f"Awaiting Approval  : {execution_summary['total_awaiting_approval']}")
+        print(f"Deferred to Human  : {execution_summary['total_deferred_to_human']}")
+        print(f"Duplicates Skipped : {execution_summary['total_duplicates_skipped']}")
+        print(f"Circuit Breaker Skip: {execution_summary['total_circuit_breaker_skipped']}")
+        print(f"Total Retries      : {execution_summary['total_retries']}")
+        print(f"Total Execution Time: {execution_summary['total_execution_time_seconds']:.4f}s")
+        print("\nExecution Results Detail:")
+        for idx, res in enumerate(execution_summary.get("results", []), start=1):
+            print(f"  Result #{idx}")
+            print(f"    ID        : {res['execution_id']}")
+            print(f"    Plan ID   : {res['plan_id']}")
+            print(f"    Strategy  : {res['strategy']}")
+            print(f"    Status    : {res['execution_status']}")
+            print(f"    Time      : {res['execution_time_seconds']:.4f}s")
+            print(f"    Retries   : {res['retry_count']}")
+            print(f"    Rollback  : {'Yes' if res['rollback_performed'] else 'No'}")
+            if res.get("rollback_detail"):
+                print(f"    RB Detail : {res['rollback_detail']}")
+            if res.get("error_message"):
+                print(f"    Error     : {res['error_message']}")
+            print(f"    Steps Executed:")
+            for step in res.get("executed_steps", []):
+                print(f"      - [{step['status']}] {step['step_name']}")
+            if res.get("skipped_steps"):
+                print(f"    Steps Skipped:")
+                for step in res.get("skipped_steps", []):
+                    print(f"      - [{step['status']}] {step['step_name']}")
+            print()
+
+        print("\n" + "=" * 50)
+        print("VERIFICATION AGENT EXECUTION")
+        print("=" * 50)
+        
+        # 14. Run verification agent
+        verification_summary = verify_remediation(execution_summary, planning_result)
+        print(f"Results Received   : {verification_summary['total_results_received']}")
+        print(f"Fully Verified     : {verification_summary['total_verified']}")
+        print(f"Partially Verified : {verification_summary['total_partially_verified']}")
+        print(f"Failed             : {verification_summary['total_failed']}")
+        print(f"Not Applicable     : {verification_summary['total_not_applicable']}")
+        print(f"Overall Post Health: {verification_summary['overall_pipeline_health']}")
+        print(f"Verification Time  : {verification_summary['total_verification_time_seconds']:.4f}s")
+        
+        v_metrics = verification_summary.get("metrics", {})
+        print(f"\nVerification Metrics:")
+        print(f"  Success Rate      : {v_metrics.get('verification_success_rate', 0.0):.1%}")
+        print(f"  Avg Confidence    : {v_metrics.get('average_verification_confidence', 0.0):.2f}")
+        print(f"  Avg Time          : {v_metrics.get('average_verification_time_seconds', 0.0):.4f}s")
+        print(f"  Total Checks      : {v_metrics.get('total_checks_performed', 0)}")
+        
+        print("\nVerification Results Detail:")
+        for idx, vr in enumerate(verification_summary.get("results", []), start=1):
+            print(f"  Verification #{idx}")
+            print(f"    ID        : {vr['verification_id']}")
+            print(f"    Exec ID   : {vr['execution_id']}")
+            print(f"    Strategy  : {vr['strategy']}")
+            print(f"    Status    : {vr['verification_status']}")
+            print(f"    Confidence: {vr['verification_confidence']:.2f}")
+            print(f"    Post Health: {vr['pipeline_health_after_verification']}")
+            print(f"    Recommend : {vr['recommendation']}")
+            print(f"    Rec Reason: {vr['recommendation_reason']}")
+            if vr.get("verified_checks"):
+                print(f"    Passed Checks:")
+                for c in vr["verified_checks"]:
+                    print(f"      - {c['criterion']}")
+            if vr.get("failed_checks"):
+                print(f"    Failed Checks:")
+                for c in vr["failed_checks"]:
+                    print(f"      - {c['criterion']}")
+            if vr.get("inconclusive_checks"):
+                print(f"    Inconclusive Checks:")
+                for c in vr["inconclusive_checks"]:
+                    print(f"      - {c['criterion']}")
+            print()
+
+    # ==========================================================================
+    # DATABASE PERSISTENCE
+    # ==========================================================================
+    if db_available:
+        print("\n" + "=" * 50)
+        print("PERSISTING TO DATABASE")
+        print("=" * 50)
+        try:
+            with db_manager.session() as session:
+                orchestrator = PersistenceOrchestrator(session)
+
+                run_record = orchestrator.persist_full_run(
+                    pipeline_name=pipeline_name,
+                    file_path=FILE_PATH,
+                    metrics=metrics,
+                    validation_report=validation_report,
+                    detection_result=detection_result,
+                    diagnosis_result=diagnosis_result,
+                    planning_result=planning_result,
+                    execution_summary=execution_summary,
+                    verification_summary=verification_summary,
+                )
+
+                print(f"✔ Pipeline run persisted: {run_record.run_id}")
+
+                # Retrieve the latest run from the database and display it
+                latest_run = orchestrator.get_latest_run()
+                if latest_run:
+                    run_summary = orchestrator.format_run_summary(latest_run)
+                    print_persisted_run(run_summary)
+
+        except Exception as db_err:
+            logger.error(f"Database persistence failed: {db_err}", exc_info=True)
+            print(f"✖ Database persistence error: {db_err}")
+    else:
+        print("\n(Database persistence skipped — database unavailable)")
 
     print("\nPipeline Finished.")
     print("=" * 50)

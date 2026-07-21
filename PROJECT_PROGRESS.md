@@ -1,7 +1,7 @@
 # Self-Healing Data Pipeline Agent — Project Progress
 
-> **Last Updated:** 2026-07-16  
-> **Status:** Foundation Complete — Ready for Anomaly Detection & AI Agent Integration
+> **Last Updated:** 2026-07-18  
+> **Status:** Core Self-Healing Loop Complete — Ingestion, Validation, Monitoring, Anomaly Detection, Diagnosis, Remediation, Execution, and Closed-Loop Verification
 
 ---
 
@@ -222,6 +222,66 @@ The `get_validation_config()` function automatically selects the correct schema,
 
 ---
 
+### 3.5 `pipeline/anomaly_detector.py`
+
+**Purpose:** Bridge deterministic validation reports and autonomous agents by producing structured `Incident` objects.
+
+| Component | Status | Description |
+|---|---|---|
+| `Incident` | ✅ Implemented | Data container with UUID, status, severity, confidence, source, description, and metadata |
+| `RuleBasedDetector` | ✅ Implemented | Detection engine evaluating record loss, quality scores, and delays against thresholds |
+| `analyse_pipeline(...)` | ✅ Implemented | Convenience entry point returning an aggregated `DetectionResult` |
+
+---
+
+### 3.6 `agents/diagnosis_agent.py`
+
+**Purpose:** Root-cause analysis engine that translates incidents into actionable diagnosis summaries.
+
+| Component | Status | Description |
+|---|---|---|
+| `Diagnosis` | ✅ Implemented | Captures root cause, transient status, suggested remediation strategy, priority (P1–P5), and confidence |
+| `RuleBasedDiagnosisEngine` | ✅ Implemented | Deterministic diagnosis config mapping incidents to probable root causes and remediation strategies |
+| `diagnose_pipeline(...)` | ✅ Implemented | Entry point that triages and localizes faults to specific pipeline stages |
+
+---
+
+### 3.7 `remediation/remediation_planner.py`
+
+**Purpose:** Decision-making layer determining *how* to apply suggested fixes.
+
+| Component | Status | Description |
+|---|---|---|
+| `RemediationPlan` | ✅ Implemented | Captures execution mode, priorities, preconditions, rollback strategies, expected outcomes, and success criteria |
+| `RuleBasedRemediationPlanner` | ✅ Implemented | Blueprints for canonical strategies with confidence gating (auto-upgrades AUTOMATIC mode to SEMI-AUTOMATIC/MANUAL on low confidence) |
+| `plan_remediation(...)` | ✅ Implemented | Aggregates and sequences plans sorted by execution priority |
+
+---
+
+### 3.8 `agents/executor_agent.py`
+
+**Purpose:** Execution layer responsible for running or simulating the corrective actions.
+
+| Component | Status | Description |
+|---|---|---|
+| `ExecutionStep` | ✅ Implemented | Audit trail steps containing actions, timestamps, reasons, and target engine |
+| `RuleBasedExecutor` | ✅ Implemented | Action simulation engine with retry policies, backoffs, circuit breakers, dry-runs, and idempotency guards |
+| `execute_remediation(...)` | ✅ Implemented | Sequential orchestrator generating structured execution summaries and results |
+
+---
+
+### 3.9 `agents/verification_agent.py`
+
+**Purpose:** Post-remediation verification that validates effectiveness and closes the feedback loop.
+
+| Component | Status | Description |
+|---|---|---|
+| `VerificationCheck` | ✅ Implemented | Individual check outcomes (PASSED, FAILED, INCONCLUSIVE, DRY_RUN) against plan criteria |
+| `RuleBasedVerificationAgent` | ✅ Implemented | Evaluates pass rates, computes verification confidence, generates recommendations (re-run, escalate), and updates health status |
+| `verify_remediation(...)` | ✅ Implemented | Orchestrator producing closed-loop verification results and summaries |
+
+---
+
 ## 4. Datasets Generated
 
 ### Clean Datasets (100 records each)
@@ -327,12 +387,10 @@ The following modules are planned for future implementation:
 
 | Module | Description |
 |---|---|
-| **Anomaly Detection** | Statistical and ML-based anomaly detection on validated data |
-| **AI Remediation Agents** | Multi-agent system to auto-fix detected issues |
-| **Remediation Engine** | Rule-based and AI-driven data correction strategies |
-| **Database Layer** | PostgreSQL / SQLite persistence for pipeline runs and metrics |
-| **Streamlit Dashboard** | Real-time visualization of pipeline health and quality scores |
-| **Unit Tests** | pytest-based test suite for all pipeline modules |
+| **Database Layer** | PostgreSQL / SQLite persistence for pipeline runs, diagnoses, execution histories, and verification reports |
+| **Streamlit Dashboard** | Real-time visualization of pipeline runs, incident triage, and self-healing timeline audits |
+| **FastAPI REST Layer** | REST APIs to retrieve pipeline metrics, trigger remediations, and handle human-in-the-loop approvals |
+| **Unit & Integration Tests** | pytest-based suite for end-to-end self-healing verification |
 | **API Ingestion** | REST API data source support via `load_api()` |
 | **JSON Ingestion** | JSON file loading via `load_json()` |
 | **Cloud Storage** | S3 / GCS / Azure Blob integration |
