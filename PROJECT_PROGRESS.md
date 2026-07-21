@@ -1,7 +1,7 @@
 # Self-Healing Data Pipeline Agent — Project Progress
 
-> **Last Updated:** 2026-07-18  
-> **Status:** Core Self-Healing Loop Complete — Ingestion, Validation, Monitoring, Anomaly Detection, Diagnosis, Remediation, Execution, and Closed-Loop Verification
+> **Last Updated:** 2026-07-21  
+> **Status:** Core Self-Healing Loop & Persistence Complete — Ingestion, Validation, Monitoring, Anomaly Detection, Diagnosis, Remediation, Execution, Closed-Loop Verification, and Database Persistence
 
 ---
 
@@ -13,6 +13,12 @@
    - [pipeline/ingestion.py](#31-pipelineingestionpy)
    - [pipeline/validation.py](#32-pipelinevalidationpy)
    - [pipeline/monitoring.py](#33-pipelinemonitoringpy)
+   - [pipeline/anomaly_detector.py](#35-pipelineanomaly_detectorpy)
+   - [agents/diagnosis_agent.py](#36-agentsdiagnosis_agentpy)
+   - [remediation/remediation_planner.py](#37-remediationremediation_plannerpy)
+   - [agents/executor_agent.py](#38-agentsexecutor_agentpy)
+   - [agents/verification_agent.py](#39-agentsverification_agentpy)
+   - [database/ Layer](#310-database-layer)
    - [main.py](#34-mainpy)
 4. [Datasets Generated](#4-datasets-generated)
 5. [Key Features & Design Decisions](#5-key-features--design-decisions)
@@ -23,11 +29,12 @@
 
 ## 1. Project Overview
 
-The **Self-Healing Data Pipeline Agent** is a production-ready portfolio project that ingests, validates, and monitors tabular datasets. The pipeline is designed to be modular and extensible so that future components — anomaly detection, AI-driven remediation agents, and a Streamlit dashboard — can be added without rewriting existing code.
+The **Self-Healing Data Pipeline Agent** is a production-ready portfolio project that ingests, validates, monitors tabular datasets, and autonomously diagnoses, remediates, verifies, and persists pipeline failure events.
 
 **Tech Stack:**
 - Python 3.10+
 - Pandas
+- SQLAlchemy ORM & SQLite (PostgreSQL ready)
 - Standard Library (`logging`, `json`, `pathlib`, `datetime`, `time`, `re`)
 
 ---
@@ -39,20 +46,38 @@ self-healing-data-pipeline/
 │
 ├── main.py                        # Pipeline orchestrator
 ├── requirements.txt               # Python dependencies
-├── PROJECT_PROGRESS.md            # This file
+├── PROJECT_PROGRESS.md            # Progress documentation
+├── CHANGELOG.md                   # Version history
 ├── README.md                      # Project readme
+├── pipeline.db                    # SQLite development database (auto-created)
+│
+├── database/                      # Database persistence layer
+│   ├── __init__.py                # Package exports
+│   ├── database.py                # Engine, session manager, and DatabaseManager
+│   ├── models.py                  # SQLAlchemy ORM models (7 entities)
+│   ├── repositories.py            # Repository CRUD operations
+│   ├── services.py                # Business persistence services & orchestrator
+│   └── migrations.md              # PostgreSQL migration guide
 │
 ├── pipeline/                      # Core pipeline modules
 │   ├── __init__.py
 │   ├── ingestion.py               # Data loading (CSV, JSON*, DB*, API*)
 │   ├── validation.py              # Data quality checks & reporting
-│   └── monitoring.py              # Execution tracking & metrics
+│   ├── monitoring.py              # Execution tracking & metrics
+│   └── anomaly_detector.py        # Anomaly detection & incident generation
 │
-├── agents/                        # (Planned) AI remediation agents
+├── agents/                        # Autonomous AI agents
+│   ├── __init__.py
+│   ├── diagnosis_agent.py         # Root cause diagnosis engine
+│   ├── executor_agent.py          # Remediation execution agent
+│   └── verification_agent.py      # Post-remediation verification agent
+│
+├── remediation/                   # Self-healing planning logic
+│   ├── __init__.py
+│   └── remediation_planner.py     # Remediation planning engine
+│
 ├── dashboard/                     # (Planned) Streamlit dashboard
-├── database/                      # (Planned) Database connectors
 ├── data/                          # (Planned) Persistent data store
-├── remediation/                   # (Planned) Self-healing logic
 ├── tests/                         # (Planned) Unit & integration tests
 ├── docs/                          # (Planned) Documentation
 │
@@ -84,12 +109,6 @@ self-healing-data-pipeline/
 | `load_database(connection_string, query)` | 🔲 Placeholder | Raises `NotImplementedError` |
 | `load_api(url, params)` | 🔲 Placeholder | Raises `NotImplementedError` |
 
-**Key Features:**
-- File existence validation via `pathlib.Path`
-- File extension validation (`.csv` only)
-- Graceful exception handling with `try/except`
-- Module-level logging for success and failure
-
 ---
 
 ### 3.2 `pipeline/validation.py`
@@ -109,176 +128,61 @@ self-healing-data-pipeline/
 | `warnings` | `List[str]` | Warning messages |
 | `issue_types` | `List[str]` | Auto-classified issue categories (no duplicates) |
 
-**Methods:**
-- `record_check(errors, warnings)` — Records one check's outcome and auto-classifies issue types
-- `to_dict()` — Converts report to a dictionary
-
-#### Validation Functions
-
-| Function | Description |
-|---|---|
-| `check_empty_dataframe(df)` | Checks if the DataFrame has zero rows |
-| `check_required_columns(df, required_columns)` | Verifies all expected columns exist |
-| `check_missing_values(df)` | Detects NULL/NaN values per column |
-| `check_duplicate_rows(df, subset)` | Finds duplicate rows (optionally on specific columns) |
-| `check_data_types(df, expected_schema)` | Validates column dtypes with equivalence mapping |
-| `check_value_ranges(df, rules)` | Checks numeric values against (min, max) bounds |
-| `validate_dataset(...)` | Orchestrates all checks and returns the full report dict |
-
-#### Data Type Equivalence Groups
-
-The validation module uses intelligent type matching so related types are not flagged as mismatches:
-
-| Group | Equivalent Types |
-|---|---|
-| Text | `object`, `str`, `string`, `StringDtype` |
-| Integer | `int`, `int8`, `int16`, `int32`, `int64`, `integer`, `Int8`–`Int64` |
-| Float | `float`, `float16`, `float32`, `float64`, `Float32`, `Float64` |
-| Boolean | `bool`, `boolean` |
-| Datetime | `datetime64`, `datetime64[ns]`, `datetime` |
-
-#### Issue Type Classification
-
-Error messages are automatically mapped to canonical issue types:
-
-| Error Keyword | Issue Type |
-|---|---|
-| Missing required column | `SCHEMA_DRIFT` |
-| Data type mismatch | `DATATYPE_MISMATCH` |
-| Missing values detected | `MISSING_VALUES` |
-| Duplicate rows | `DUPLICATE_RECORDS` |
-| Fall below minimum / Exceed maximum | `OUTLIER` |
-| DataFrame is empty | `EMPTY_DATASET` |
-
 ---
 
 ### 3.3 `pipeline/monitoring.py`
 
 **Purpose:** Track pipeline execution time, row counts, and quality metrics.
 
-#### `PipelineMonitor` Class
-
-| Method | Description |
-|---|---|
-| `start_pipeline()` | Records start time and UTC timestamp |
-| `end_pipeline()` | Records end time and UTC timestamp |
-| `record_rows_processed(count)` | Accumulates successfully processed row count |
-| `record_rows_failed(count)` | Accumulates failed row count |
-| `calculate_execution_time()` | Returns elapsed time in seconds |
-| `generate_metrics(validation_report)` | Returns full metrics dict with validation-aware quality score |
-
-#### Quality Score Calculation
-
-- **With validation report:** `quality_score = (passed_checks / total_checks) × 100`
-- **Without validation report (backward compatible):** `quality_score = success_rate × 100`
-
-#### Metrics Output Fields
-
-| Field | Type | Description |
-|---|---|---|
-| `pipeline_name` | `str` | Name of the pipeline |
-| `start_timestamp` | `str` | UTC start time |
-| `end_timestamp` | `str` | UTC end time |
-| `execution_time_seconds` | `float` | Wall-clock duration |
-| `rows_processed` | `int` | Successfully processed rows |
-| `rows_failed` | `int` | Failed rows |
-| `total_rows` | `int` | `rows_processed + rows_failed` |
-| `success_rate` | `float` | `rows_processed / total_rows` |
-| `quality_score` | `float` | Validation-aware quality percentage |
-
 ---
 
-### 3.4 `main.py`
-
-**Purpose:** Orchestrate the full pipeline — ingestion → validation → monitoring.
-
-#### Pipeline Workflow
-
-```
-1. Initialize PipelineMonitor
-2. Start monitoring
-3. Load CSV via ingestion.load_csv()
-4. Record rows processed
-5. Run validation via validation.validate_dataset()
-6. Print per-check status (✔ / ✖)
-7. Stop monitoring
-8. Generate metrics (with validation report for quality score)
-9. Print: Validation Report → Issue Types → Quality Score → Pipeline Metrics
-```
-
-#### Configuration
-
-The `FILE_PATH` variable at the top of the script controls which dataset is loaded. It supports all 9 datasets (3 clean + 6 faulty).
-
-#### Dynamic Schema Detection
-
-The `get_validation_config()` function automatically selects the correct schema, required columns, and value-range rules based on the filename:
-
-| Filename Pattern | Schema Applied |
-|---|---|
-| `customer*`, `missing_values*`, `duplicate*`, `corrupted*` | Customer schema |
-| `order*`, `drift*`, `datatype*`, `outlier*` | Orders schema |
-| `product*` | Products schema |
-
----
-
-### 3.5 `pipeline/anomaly_detector.py`
+### 3.4 `pipeline/anomaly_detector.py`
 
 **Purpose:** Bridge deterministic validation reports and autonomous agents by producing structured `Incident` objects.
 
-| Component | Status | Description |
-|---|---|---|
-| `Incident` | ✅ Implemented | Data container with UUID, status, severity, confidence, source, description, and metadata |
-| `RuleBasedDetector` | ✅ Implemented | Detection engine evaluating record loss, quality scores, and delays against thresholds |
-| `analyse_pipeline(...)` | ✅ Implemented | Convenience entry point returning an aggregated `DetectionResult` |
-
 ---
 
-### 3.6 `agents/diagnosis_agent.py`
+### 3.5 `agents/diagnosis_agent.py`
 
 **Purpose:** Root-cause analysis engine that translates incidents into actionable diagnosis summaries.
 
-| Component | Status | Description |
-|---|---|---|
-| `Diagnosis` | ✅ Implemented | Captures root cause, transient status, suggested remediation strategy, priority (P1–P5), and confidence |
-| `RuleBasedDiagnosisEngine` | ✅ Implemented | Deterministic diagnosis config mapping incidents to probable root causes and remediation strategies |
-| `diagnose_pipeline(...)` | ✅ Implemented | Entry point that triages and localizes faults to specific pipeline stages |
-
 ---
 
-### 3.7 `remediation/remediation_planner.py`
+### 3.6 `remediation/remediation_planner.py`
 
 **Purpose:** Decision-making layer determining *how* to apply suggested fixes.
 
-| Component | Status | Description |
-|---|---|---|
-| `RemediationPlan` | ✅ Implemented | Captures execution mode, priorities, preconditions, rollback strategies, expected outcomes, and success criteria |
-| `RuleBasedRemediationPlanner` | ✅ Implemented | Blueprints for canonical strategies with confidence gating (auto-upgrades AUTOMATIC mode to SEMI-AUTOMATIC/MANUAL on low confidence) |
-| `plan_remediation(...)` | ✅ Implemented | Aggregates and sequences plans sorted by execution priority |
-
 ---
 
-### 3.8 `agents/executor_agent.py`
+### 3.7 `agents/executor_agent.py`
 
 **Purpose:** Execution layer responsible for running or simulating the corrective actions.
 
-| Component | Status | Description |
-|---|---|---|
-| `ExecutionStep` | ✅ Implemented | Audit trail steps containing actions, timestamps, reasons, and target engine |
-| `RuleBasedExecutor` | ✅ Implemented | Action simulation engine with retry policies, backoffs, circuit breakers, dry-runs, and idempotency guards |
-| `execute_remediation(...)` | ✅ Implemented | Sequential orchestrator generating structured execution summaries and results |
-
 ---
 
-### 3.9 `agents/verification_agent.py`
+### 3.8 `agents/verification_agent.py`
 
 **Purpose:** Post-remediation verification that validates effectiveness and closes the feedback loop.
 
-| Component | Status | Description |
-|---|---|---|
-| `VerificationCheck` | ✅ Implemented | Individual check outcomes (PASSED, FAILED, INCONCLUSIVE, DRY_RUN) against plan criteria |
-| `RuleBasedVerificationAgent` | ✅ Implemented | Evaluates pass rates, computes verification confidence, generates recommendations (re-run, escalate), and updates health status |
-| `verify_remediation(...)` | ✅ Implemented | Orchestrator producing closed-loop verification results and summaries |
+---
+
+### 3.9 `database/` Layer
+
+**Purpose:** Enterprise-grade database persistence layer using SQLAlchemy ORM and Repository Pattern.
+
+| Component | File | Status | Description |
+|---|---|---|---|
+| Engine & Session | `database/database.py` | ✅ Implemented | `DatabaseManager`, SQLite WAL mode, FK pragmas, and context-managed transactions |
+| ORM Models | `database/models.py` | ✅ Implemented | 7 entities (`PipelineRun`, `ValidationReport`, `Incident`, `Diagnosis`, `RemediationPlan`, `ExecutionResult`, `VerificationResult`) |
+| Repositories | `database/repositories.py` | ✅ Implemented | CRUD repositories with search filters and domain lookup methods |
+| Services | `database/services.py` | ✅ Implemented | `PersistenceOrchestrator` saving all pipeline stages in exact dependency order |
+| Migration Guide | `database/migrations.md` | ✅ Implemented | PostgreSQL migration documentation, Alembic setup, and Docker Compose configurations |
+
+---
+
+### 3.10 `main.py`
+
+**Purpose:** Orchestrate the full self-healing pipeline and automatically persist every stage to the database.
 
 ---
 
@@ -314,86 +218,24 @@ The `get_validation_config()` function automatically selects the correct schema,
 | **Docstrings** | Comprehensive docstrings on all classes, methods, and functions |
 | **Logging** | Module-level `logging.getLogger(__name__)` in every file |
 | **Exception Handling** | `try/except` blocks with meaningful error messages |
-| **No Hardcoded Paths** | All file paths are configurable variables or function parameters |
+| **Repository Pattern** | Decoupled database queries from business logic |
+| **Zero-Friction DB Migration**| Easily switch from SQLite to PostgreSQL by altering the `DATABASE_URL` |
 | **UTF-8 Safe Output** | `sys.stdout` is wrapped for Windows cp1252 compatibility |
-| **Modularity** | Each module is independently importable and testable |
-| **Backward Compatibility** | `generate_metrics()` works with or without a validation report |
-| **Extensibility** | Designed for future Great Expectations, PostgreSQL, Kafka, and API integration |
 
 ---
 
-## 6. Sample Output
-
-### Clean Dataset (`customers.csv`)
-
-```
-==================================================
-SELF-HEALING DATA PIPELINE
-==================================================
-
-Loading dataset from: customers.csv...
-✔ Dataset loaded successfully.
-Rows Loaded: 100
-
-Running validation...
-✔ DataFrame is not empty
-✔ Required columns found
-✔ No duplicate rows
-✔ No missing values
-✔ Data types match expected schema
-
-Validation Status: PASSED
-
-Issue Types:
-  None
-
-Quality Score: 100.0%
-```
-
-### Faulty Dataset (`outliers.csv`)
-
-```
-==================================================
-SELF-HEALING DATA PIPELINE
-==================================================
-
-Loading dataset from: outliers.csv...
-✔ Dataset loaded successfully.
-Rows Loaded: 50
-
-Running validation...
-✔ DataFrame is not empty
-✔ Required columns found
-✔ No duplicate rows
-✔ No missing values
-✔ Data types match expected schema
-✖ Values in quantity exceed maximum 100 (1 rows)
-✖ Values in price fall below minimum 0.0 (1 rows)
-✖ Values in price exceed maximum 100000.0 (1 rows)
-
-Validation Status: FAILED
-
-Issue Types:
-  - OUTLIER
-
-Quality Score: 83.33%
-```
-
----
-
-## 7. What's Next
+## 6. What's Next
 
 The following modules are planned for future implementation:
 
 | Module | Description |
 |---|---|
-| **Database Layer** | PostgreSQL / SQLite persistence for pipeline runs, diagnoses, execution histories, and verification reports |
 | **Streamlit Dashboard** | Real-time visualization of pipeline runs, incident triage, and self-healing timeline audits |
 | **FastAPI REST Layer** | REST APIs to retrieve pipeline metrics, trigger remediations, and handle human-in-the-loop approvals |
+| **Docker Containerisation** | Containerise application, dashboard, and PostgreSQL database |
 | **Unit & Integration Tests** | pytest-based suite for end-to-end self-healing verification |
 | **API Ingestion** | REST API data source support via `load_api()` |
 | **JSON Ingestion** | JSON file loading via `load_json()` |
-| **Cloud Storage** | S3 / GCS / Azure Blob integration |
 | **Kafka Streaming** | Real-time data stream ingestion |
 
 ---

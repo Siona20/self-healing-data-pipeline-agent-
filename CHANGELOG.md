@@ -8,12 +8,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - Upcoming
 
 ### Planned Features
-- Incident Logging & Persistence
 - Streamlit Dashboard (`dashboard/`)
 - FastAPI REST layer
 - Docker containerisation
 - Apache Airflow orchestration
 - AWS Deployment
+
+---
+
+## [0.8.0] - 2026-07-21
+
+### Added
+
+#### Database Persistence Layer (`database/`)
+- Enterprise-grade **Database Persistence Layer** using SQLAlchemy ORM and the Repository Pattern.
+- **`database/database.py`**:
+  - `DatabaseManager` providing engine creation, scoped session management (`SessionLocal`), and table initialization (`init_db()`).
+  - Automatic SQLite performance and integrity configuration: **Write-Ahead Logging (WAL)** and **Foreign Key** enforcement pragmas via connection listeners.
+  - Context-managed `session()` method handling auto-commit on success and auto-rollback on error.
+  - FastAPI dependency generator `get_db()`.
+- **`database/models.py`**:
+  - 7 SQLAlchemy ORM models representing all stages of the self-healing loop: `PipelineRunModel`, `ValidationReportModel`, `IncidentModel`, `DiagnosisModel`, `RemediationPlanModel`, `ExecutionResultModel`, and `VerificationResultModel`.
+  - Reusable `TimestampMixin` for auto-managing `created_at` and `updated_at` timestamps across all tables.
+  - Strict Foreign Keys with `ON DELETE CASCADE` and explicit relationships between entities.
+- **`database/repositories.py`**:
+  - `BaseRepository` abstracting generic CRUD (`create`, `update`, `delete`, `get_by_id`, `get_all`, `get_latest`).
+  - Typed repository subclasses for each domain model: `PipelineRunRepository`, `ValidationReportRepository`, `IncidentRepository`, `DiagnosisRepository`, `RemediationPlanRepository`, `ExecutionResultRepository`, and `VerificationResultRepository`.
+  - Domain-specific filter methods (`search`, `get_unhealthy_runs`, `get_failed_executions`).
+- **`database/services.py`**:
+  - High-level business persistence services for each domain entity.
+  - `PersistenceOrchestrator` offering single-call end-to-end run persistence (`persist_full_run`) that persists ingestion, validation, anomaly detection, diagnosis, planning, execution, and verification stages in exact dependency order.
+  - `format_run_summary()` helper to format persisted records into clean nested dictionaries.
+- **`database/migrations.md`**:
+  - PostgreSQL migration guide detailing environment variable configuration, Alembic setup steps, PostgreSQL GIN index recommendations, and Docker Compose configurations.
+
+#### Main Orchestrator (`main.py`)
+- Integrated automatic database initialization and `PersistenceOrchestrator` execution.
+- Added `print_persisted_run()` to query and print the latest persisted pipeline run record from the database at the conclusion of each execution.
 
 ---
 

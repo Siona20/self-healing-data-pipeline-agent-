@@ -9,3 +9,6 @@ venv/
 *.pyc
 logs/
 .streamlit/secrets.toml
+*.db
+*.sqlite
+*.sqlite3
